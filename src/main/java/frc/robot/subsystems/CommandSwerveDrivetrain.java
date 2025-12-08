@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -235,7 +237,26 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+
+        SmartDashboard.putNumber("Module 0 Drive Voltage", getModule(0).getDriveMotor().getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Module 0 Steer Voltage", getModule(0).getSteerMotor().getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Module 1 Drive Voltage", getModule(1).getDriveMotor().getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Module 1 Steer Voltage", getModule(1).getSteerMotor().getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Module 2 Drive Voltage", getModule(2).getDriveMotor().getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Module 2 Steer Voltage", getModule(2).getSteerMotor().getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Module 3 Drive Voltage", getModule(3).getDriveMotor().getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Module 3 Steer Voltage", getModule(3).getSteerMotor().getSupplyCurrent().getValueAsDouble());
+
+        double robotSpeeds = Math.sqrt(
+            (getState().Speeds.vxMetersPerSecond * getState().Speeds.vxMetersPerSecond)
+            + (getState().Speeds.vyMetersPerSecond * getState().Speeds.vyMetersPerSecond)) * 3.28084;
+        SmartDashboard.putData("Pigeon 2.0",getPigeon2());
+        SmartDashboard.putNumber("Voltage", RobotController.getBatteryVoltage());
+        SmartDashboard.putNumber("Speed (ft/s)", robotSpeeds);
+        SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
     }
+
+    
 
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();

@@ -15,13 +15,17 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
+import frc.robot.Commands.CandleClear;
+import frc.robot.Commands.LimelightsCombined.LimelightsDetection;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.CANdleLEDs;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.LimelightOne;
+import frc.robot.subsystems.LimelightTwo;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    private double MaxAngularRate = RotationsPerSecond.of(.5).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -36,11 +40,30 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     
+    public static final LimelightOne limelightOne = new LimelightOne();
+    public static final LimelightTwo limelightTWo = new LimelightTwo();
+
+    public static final CANdleLEDs candle = new CANdleLEDs();
+
 
     public RobotContainer() {
         configureBindings();
     }
 
+    public double LL1HasValidTargets() {
+        return LimelightOne.hasValidTargets();
+    }
+    public double LL2HasValidTargets() {
+        return LimelightTwo.hasValidTargets();
+    }
+
+    public void enabledLEDS() {
+        candle.enabledIdle();
+    }
+
+    public void disabledLEDS() {
+        candle.disabledIdle();
+    }
 
     private void configureBindings() {
 
@@ -75,6 +98,9 @@ public class RobotContainer {
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
         ));
+        // joystick.x().onTrue(new LimelightDetection(candle).withTimeout(2));
+        joystick.x().whileTrue(new LimelightsDetection(candle).andThen(new CandleClear(candle)));
+        joystick.y().onTrue(new CandleClear(candle));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
