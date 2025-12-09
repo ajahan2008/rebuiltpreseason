@@ -19,6 +19,10 @@ public class IntakeMechanism extends SubsystemBase {
   /** Creates a new IntakeMechanism. */
   public IntakeMechanism() {}
 
+  public void pivotSpeed(double speed) {
+    intakeMotor.set(speed);
+  }
+
   public void orangeIntake(double speed) {
     intakeMotor.set(speed);
   }
