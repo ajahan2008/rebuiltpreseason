@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.6188344594594595,
+        "y": 4.05464527027027
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.245270270265329,
+        "y": 8.642905405405406
+      },
+      "isLocked": false,
+      "linkedName": "arthurs sick start"
+    },
+    {
+      "anchor": {
+        "x": 0.9091216216210902,
+        "y": 3.995354729730243
+      },
+      "prevControl": {
+        "x": -0.09087837837890955,
+        "y": 3.995354729730243
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "this is your destination "
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -41.82016988023054
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}
