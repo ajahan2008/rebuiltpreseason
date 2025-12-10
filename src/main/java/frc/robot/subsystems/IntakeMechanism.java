@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeMechanism extends SubsystemBase {
 
-  private TalonFX intakeMotor = new TalonFX(Constants.IntakeMechanism.intakeMotor);
-  private TalonFX pivotMotor = new TalonFX(Constants.IntakeMechanism.pivotMotor);
+  private TalonFX intakeMotor = new TalonFX(Constants.IntakeIDs.intakeMotor);
+  private TalonFX pivotMotor = new TalonFX(Constants.IntakeIDs.pivotMotor);
 
   /** Creates a new IntakeMechanism. */
   public IntakeMechanism() {}

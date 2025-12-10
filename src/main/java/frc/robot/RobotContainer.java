@@ -18,10 +18,14 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Commands.CandleClear;
+import frc.robot.Commands.Intake.IntakeCommand;
+import frc.robot.Commands.Intake.IntakePivotCommand;
 import frc.robot.Commands.LimelightsCombined.LimelightsDetection;
+import frc.robot.Constants.IntakeIDs;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CANdleLEDs;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.IntakeMechanism;
 import frc.robot.subsystems.LimelightOne;
 import frc.robot.subsystems.LimelightTwo;
 
@@ -46,6 +50,8 @@ public class RobotContainer {
     public static final LimelightTwo limelightTWo = new LimelightTwo();
 
     public static final CANdleLEDs candle = new CANdleLEDs();
+
+    public static final IntakeMechanism intake = new IntakeMechanism();
 
     private final SendableChooser<Command> autoChooser;
 
@@ -99,11 +105,10 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
-        joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        joystick.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-        ));
-        // joystick.x().onTrue(new LimelightDetection(candle).withTimeout(2));
+        // joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        // joystick.b().whileTrue(drivetrain.applyRequest(() ->
+        //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
+        // ));
         joystick.x().whileTrue(new LimelightsDetection(candle).andThen(new CandleClear(candle)));
         joystick.y().onTrue(new CandleClear(candle));
 
@@ -113,6 +118,11 @@ public class RobotContainer {
         joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
         joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
         joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+
+        joystick.povUp().whileTrue(new IntakePivotCommand(intake, .5));
+        joystick.povDown().whileTrue(new IntakePivotCommand(intake, -0.5));
+        joystick.povRight().onTrue(new IntakeCommand(intake, 0.5).withTimeout(1));
+        joystick.povLeft().onTrue(new IntakeCommand(intake, -0.5).withTimeout(1));
 
         // reset the field-centric heading on left bumper press
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
