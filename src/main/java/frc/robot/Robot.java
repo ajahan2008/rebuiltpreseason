@@ -16,7 +16,7 @@ public class Robot extends TimedRobot {
   public Robot() {
     m_robotContainer = new RobotContainer();
 
-    m_robotContainer.disabledLEDS();
+    // m_robotContainer.disabledLEDS();
 
   }
 
@@ -52,7 +52,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    m_robotContainer.enabledLEDS();
+    //m_robotContainer.enabledLEDS();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopExit() {
-    m_robotContainer.disabledLEDS();
+    //m_robotContainer.disabledLEDS();
   }
 
   @Override

@@ -101,9 +101,9 @@ public class CANdleLEDs extends SubsystemBase {
     }
 
     // add animations to chooser for slot 0
-    m_anim0Chooser.addOption("SolidColor", AnimationType.SolidColor);
+    m_anim0Chooser.setDefaultOption("SolidColor", AnimationType.SolidColor);
     m_anim0Chooser.addOption("Color Flow", AnimationType.ColorFlow);
-    m_anim0Chooser.setDefaultOption("Rainbow", AnimationType.Rainbow);
+    m_anim0Chooser.addOption("Rainbow", AnimationType.Rainbow);
     m_anim0Chooser.addOption("Twinkle", AnimationType.Twinkle);
     m_anim0Chooser.addOption("Twinkle OFf", AnimationType.TwinkleOff);
     m_anim0Chooser.addOption("Fire", AnimationType.Fire);
@@ -114,9 +114,9 @@ public class CANdleLEDs extends SubsystemBase {
     m_anim0Chooser.addOption("None", AnimationType.None);
 
     // add animations to chooser for slot 1
-    m_anim0Chooser.addOption("SolidColor", AnimationType.SolidColor);
+    m_anim0Chooser.setDefaultOption("SolidColor", AnimationType.SolidColor);
     m_anim1Chooser.addOption("Color Flow", AnimationType.ColorFlow);
-    m_anim1Chooser.setDefaultOption("Rainbow", AnimationType.Rainbow);
+    m_anim1Chooser.addOption("Rainbow", AnimationType.Rainbow);
     m_anim1Chooser.addOption("Twinkle", AnimationType.Twinkle);
     m_anim1Chooser.addOption("Twinkle OFf", AnimationType.TwinkleOff);
     m_anim1Chooser.addOption("Fire", AnimationType.Fire);
@@ -146,7 +146,7 @@ public class CANdleLEDs extends SubsystemBase {
             default:
             case SolidColor:
                 candle.setControl(
-                  new SolidColor(kSlot0StartIdx, kSlot0EndIdx).withColor(white)
+                  new SolidColor(kSlot0StartIdx, kSlot0EndIdx).withColor(orange)
                 );
                 break;
             case ColorFlow:
@@ -216,7 +216,7 @@ public class CANdleLEDs extends SubsystemBase {
           default:
           case SolidColor:
               candle.setControl(
-                new SolidColor(kSlot1StartIdx, kSlot1EndIdx).withColor(white)
+                new SolidColor(kSlot1StartIdx, kSlot1EndIdx).withColor(orange)
               );
               break;
           case ColorFlow:

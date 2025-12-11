@@ -11,7 +11,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 
-public class LimelightTwo {
+public class LimelightTwo extends SubsystemBase{
 
   static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-two");
   static NetworkTableEntry tx = table.getEntry("tx");

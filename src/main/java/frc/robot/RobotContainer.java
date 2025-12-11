@@ -49,7 +49,7 @@ public class RobotContainer {
     public static final LimelightOne limelightOne = new LimelightOne();
     public static final LimelightTwo limelightTWo = new LimelightTwo();
 
-    public static final CANdleLEDs candle = new CANdleLEDs();
+    //public static final CANdleLEDs candle = new CANdleLEDs();
 
     public static final IntakeMechanism intake = new IntakeMechanism();
 
@@ -60,7 +60,7 @@ public class RobotContainer {
         SmartDashboard.putData("Auto Chooser", autoChooser);
         configureBindings();
     }
-
+ 
     public double LL1HasValidTargets() {
         return LimelightOne.hasValidTargets();
     }
@@ -68,13 +68,13 @@ public class RobotContainer {
         return LimelightTwo.hasValidTargets();
     }
 
-    public void enabledLEDS() {
-        candle.enabledIdle();
-    }
+    // public void enabledLEDS() {
+    //     candle.enabledIdle();
+    // }
 
-    public void disabledLEDS() {
-        candle.disabledIdle();
-    }
+    // public void disabledLEDS() {
+    //     candle.disabledIdle();
+    // }
 
     private void configureBindings() {
 
@@ -109,8 +109,8 @@ public class RobotContainer {
         // joystick.b().whileTrue(drivetrain.applyRequest(() ->
         //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
         // ));
-        joystick.x().whileTrue(new LimelightsDetection(candle).andThen(new CandleClear(candle)));
-        joystick.y().onTrue(new CandleClear(candle));
+        // joystick.x().whileTrue(new LimelightsDetection(candle).andThen(new CandleClear(candle)));
+        // joystick.y().onTrue(new CandleClear(candle));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
