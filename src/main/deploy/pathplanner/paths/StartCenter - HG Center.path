@@ -3,34 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.470608108108109,
-        "y": 7.77018581081081
+        "x": 7.6,
+        "y": 4.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.067229729729199,
-        "y": 6.2681587837842985
+        "x": 8.192996754874198,
+        "y": 3.999547272602881
       },
       "isLocked": false,
-      "linkedName": "arthur in the corner "
+      "linkedName": "Start - Center"
     },
     {
       "anchor": {
-        "x": 0.9091216216210902,
-        "y": 3.995354729730243
+        "x": 5.65,
+        "y": 4.0
       },
       "prevControl": {
-        "x": -0.09087837837890977,
-        "y": 3.995354729730243
+        "x": 5.275077564649637,
+        "y": 3.9986553657967643
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "this is your destination "
+      "linkedName": "HG - Center"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "pointTowardsZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 0.4,
+        "y": 4.0
+      },
+      "rotationOffset": 0.0,
+      "minWaypointRelativePos": 0.25,
+      "maxWaypointRelativePos": 0.75,
+      "name": "Point Towards Zone"
+    }
+  ],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
@@ -42,13 +53,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -41.82016988023054
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 178.4198275272
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
