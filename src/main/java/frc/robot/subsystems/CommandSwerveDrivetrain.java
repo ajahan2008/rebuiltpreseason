@@ -291,9 +291,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
     }
 
-    private void configureAutoBuilder() {
-        try {
-            var config = RobotConfig.fromGUISettings();
+    public void configureAutoBuilder(RobotConfig config) {
             AutoBuilder.configure(
                 () -> getState().Pose, // Supplier of current robot pose
                 this::resetPose, // Consumer for seeding pose against auto
@@ -309,15 +307,16 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                     new PIDConstants(1, 0, 0)
                 ),
                 config,
-                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
-                this
+                () -> {
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
+                }
             );
-        } catch (Exception e) {
-            // handle exception as needed
-            DriverStation.reportError("Faile dto load PathPlanner config and configure AutoBuilder", e.getStackTrace());
-        }
-
     }
+
 
     /**
      * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
