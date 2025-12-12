@@ -66,6 +66,12 @@ public class RobotContainer {
 
     public RobotContainer() {
 
+        try {
+            config = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+            DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
+        }
+
         AutoBuilder.configure(
             () -> drivetrain.getState().Pose, 
             drivetrain::resetPose, 
@@ -87,16 +93,11 @@ public class RobotContainer {
                 return false;
             }, 
             drivetrain);
-
-        try {
-            config = RobotConfig.fromGUISettings();
-        } catch (Exception e) {
-            DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
-        }
         
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
         configureBindings();
+        candle.turnOrange();
     }
 
     public double LL1HasValidTargets() {

@@ -146,7 +146,7 @@ public class CANdleLEDs extends SubsystemBase {
             default:
             case SolidColor:
                 candle.setControl(
-                  new SolidColor(kSlot0StartIdx, kSlot0EndIdx).withColor(white)
+                  new SolidColor(kSlot0StartIdx, kSlot0EndIdx).withColor(orange)
                 );
                 break;
             case ColorFlow:
@@ -216,7 +216,7 @@ public class CANdleLEDs extends SubsystemBase {
           default:
           case SolidColor:
               candle.setControl(
-                new SolidColor(kSlot1StartIdx, kSlot1EndIdx).withColor(white)
+                new SolidColor(kSlot1StartIdx, kSlot1EndIdx).withColor(orange)
               );
               break;
           case ColorFlow:
@@ -294,6 +294,11 @@ public class CANdleLEDs extends SubsystemBase {
     candle.setControl(new SolidColor(kSlot0StartIdx, kSlot1EndIdx).withColor(violet));
   }
 
+  public void turnOrange() {
+    commandUsing = true;
+    candle.setControl(new SolidColor(kSlot0StartIdx, kSlot1EndIdx).withColor(orange));
+  }
+
   public void clearAnimation(int startIndex, int endIndex) {
     commandUsing = true;
     for (int i = startIndex; i < endIndex; ++i) {
@@ -318,14 +323,13 @@ public class CANdleLEDs extends SubsystemBase {
 
     clearAnimation(kSlot0StartIdx, kSlot1EndIdx);
     commandUsing = false;
-    candle.setControl( new SingleFadeAnimation(kSlot0StartIdx, kSlot1EndIdx).withColor(orange));
+    candle.setControl(new SingleFadeAnimation(kSlot0StartIdx, kSlot1EndIdx).withColor(orange));
 
   }
 
   public void disabledIdle() {
     clearAnimation(kSlot0StartIdx, kSlot1EndIdx);
-    commandUsing = false;
-    candle.setControl( new SolidColor(kSlot0StartIdx, kSlot1EndIdx).withColor(orange));
+    turnOrange();
   }
 
   @Override
