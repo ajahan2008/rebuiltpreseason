@@ -36,11 +36,11 @@ import frc.robot.subsystems.LimelightTwo;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(.5).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    private double MaxAngularRate = RotationsPerSecond.of(.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * .1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -56,7 +56,7 @@ public class RobotContainer {
 
     public static final CANdleLEDs candle = new CANdleLEDs();
 
-    public static final IntakeMechanism intake = new IntakeMechanism();
+    // public static final IntakeMechanism intake = new IntakeMechanism();
 
     private final SendableChooser<Command> autoChooser;
 
@@ -125,6 +125,10 @@ public class RobotContainer {
 
             double kSpeed = 1;
             double kRotationRate = 1;
+
+            double joystickX = joystick.getLeftX();
+            double joystickY = joystick.getLeftY();
+            double joystickRotate = joystick.getRightX();
     
             double velocityX = joystick.getLeftY() * kSpeed;
             double velocityY = joystick.getLeftX() * kSpeed;
@@ -134,6 +138,9 @@ public class RobotContainer {
                     .withVelocityX(-velocityX * MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(-velocityY * MaxSpeed) // Drive left with negative X (left)
                     .withRotationalRate(-rotationalRate * MaxAngularRate); // Drive counterclockwise with negative X (left)
+                    // .withVelocityX(-joystickX)
+                    // .withVelocityY(-joystickY)
+                    // .withRotationalRate(-joystickRotate);
             })
         );
 
@@ -158,10 +165,15 @@ public class RobotContainer {
         joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
         joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
-        joystick.povUp().whileTrue(new IntakePivotCommand(intake, .5));
-        joystick.povDown().whileTrue(new IntakePivotCommand(intake, -0.5));
-        joystick.povRight().onTrue(new IntakeCommand(intake, 0.5).withTimeout(1));
-        joystick.povLeft().onTrue(new IntakeCommand(intake, -0.5).withTimeout(1));
+        // joystick.povUp().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(.25).withVelocityY(0).withRotationalRate(0)));
+        // joystick.povDown().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(-.25).withVelocityY(0).withRotationalRate(0)));
+        // joystick.povLeft().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(0).withVelocityY(.25).withRotationalRate(0)));
+        // joystick.povRight().whileTrue(drivetrain.applyRequest(() -> drive.withVelocityX(0).withVelocityY(.25).withRotationalRate(0)));
+
+        // joystick.povUp().whileTrue(new IntakePivotCommand(intake, .5));
+        // joystick.povDown().whileTrue(new IntakePivotCommand(intake, -0.5));
+        // joystick.povRight().onTrue(new IntakeCommand(intake, 0.5).withTimeout(1));
+        // joystick.povLeft().onTrue(new IntakeCommand(intake, -0.5).withTimeout(1));
 
         // reset the field-centric heading on left bumper press
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));

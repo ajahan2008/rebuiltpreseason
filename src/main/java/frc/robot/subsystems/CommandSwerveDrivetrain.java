@@ -253,6 +253,24 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putNumber("Module 3 Drive Voltage", getModule(3).getDriveMotor().getSupplyCurrent().getValueAsDouble());
         SmartDashboard.putNumber("Module 3 Steer Voltage", getModule(3).getSteerMotor().getSupplyCurrent().getValueAsDouble());
 
+        SmartDashboard.putNumber("Module 0 Steer Output", getModule(0).getSteerMotor().getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Module 1 Steer Output", getModule(1).getSteerMotor().getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Module 2 Steer Output", getModule(2).getSteerMotor().getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Module 3 Steer Output", getModule(3).getSteerMotor().getMotorVoltage().getValueAsDouble());
+        
+        SmartDashboard.putNumber("Module 0 Cancoder Positon", getModule(0).getEncoder().getPosition().getValueAsDouble());
+
+        SmartDashboard.putNumber("Module 0 Steer Angle", getModule(0).getSteerMotor().getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Module 1 Steer Angle", getModule(1).getSteerMotor().getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Module 2 Steer Angle", getModule(2).getSteerMotor().getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Module 3 Steer Angle", getModule(3).getSteerMotor().getPosition().getValueAsDouble());
+
+        SmartDashboard.putNumber("Module 0 Cancoder Voltage", getModule(0).getEncoder().getSupplyVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Module 1 Cancoder Voltage", getModule(1).getEncoder().getSupplyVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Module 2 Cancoder Voltage", getModule(2).getEncoder().getSupplyVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Module 3 Cancoder Voltage", getModule(3).getEncoder().getSupplyVoltage().getValueAsDouble());
+
+
         double robotSpeeds = Math.sqrt(
             (getState().Speeds.vxMetersPerSecond * getState().Speeds.vxMetersPerSecond)
             + (getState().Speeds.vyMetersPerSecond * getState().Speeds.vyMetersPerSecond)) * 3.28084;
@@ -289,32 +307,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     @Override
     public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
-    }
-
-    public void configureAutoBuilder(RobotConfig config) {
-            AutoBuilder.configure(
-                () -> getState().Pose, // Supplier of current robot pose
-                this::resetPose, // Consumer for seeding pose against auto
-                () -> getState().Speeds, // Supplier of current robot speeds
-                // Consumer of chassisspeeds and feedforwards to drive the robot
-                (speeds, feedforwards) -> setControl(
-                    m_pathApplyRobotSpeeds.withSpeeds(speeds)
-                        .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
-                        .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
-                ),
-                new PPHolonomicDriveController(
-                    new PIDConstants(1, 0, 0),
-                    new PIDConstants(1, 0, 0)
-                ),
-                config,
-                () -> {
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
-                }
-            );
     }
 
 
