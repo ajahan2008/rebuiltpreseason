@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest.RobotCentric;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -26,6 +27,7 @@ import frc.robot.Commands.CandleClear;
 import frc.robot.Commands.Intake.IntakeCommand;
 import frc.robot.Commands.Intake.IntakePivotCommand;
 import frc.robot.Commands.LimelightsCombined.LimelightsDetection;
+import frc.robot.Commands.LimelightsCombined.Alignment;
 import frc.robot.Constants.IntakeIDs;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CANdleLEDs;
@@ -63,6 +65,8 @@ public class RobotContainer {
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
     RobotConfig config;
+
+    RobotCentric robotCentric = new RobotCentric();
 
     public RobotContainer() {
 
@@ -156,7 +160,7 @@ public class RobotContainer {
         //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
         // ));
         joystick.x().whileTrue(new LimelightsDetection(candle).andThen(new CandleClear(candle)));
-        joystick.y().onTrue(new CandleClear(candle));
+        joystick.povLeft().onTrue(new Alignment(drivetrain, MaxSpeed, MaxAngularRate, robotCentric));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.

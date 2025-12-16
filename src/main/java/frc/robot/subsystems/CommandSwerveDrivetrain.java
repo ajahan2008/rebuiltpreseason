@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.*;
 
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
@@ -16,8 +17,11 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -27,6 +31,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter.AdvantageScopeOpenBehavior;
 
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
@@ -224,6 +229,16 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return m_sysIdRoutineToApply.dynamic(direction);
     }
 
+    
+    SwerveModuleState[] states = new SwerveModuleState[] {
+        new SwerveModuleState(),
+        new SwerveModuleState(),
+        new SwerveModuleState(),
+        new SwerveModuleState()
+    };
+
+    StructArrayPublisher<SwerveModuleState> publisher = NetworkTableInstance.getDefault().getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
+
     @Override
     public void periodic() {
         /*
@@ -278,9 +293,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         SmartDashboard.putNumber("Voltage", RobotController.getBatteryVoltage());
         SmartDashboard.putNumber("Speed (ft/s)", robotSpeeds);
         SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
-    }
 
-    
+        publisher.set(states);
+    }
 
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
