@@ -2,70 +2,63 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.Commands.LimelightsCombined;
+package frc.robot.Commands.CANRange;
 
-import java.math.RoundingMode;
-
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.LimelightOne;
+import frc.robot.subsystems.CANRange;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveRequest.RobotCentric;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Alignment extends Command {
+public class GetInRange extends Command {
 
+  private CANRange canRange;
   private CommandSwerveDrivetrain drivetrain;
-  private LimelightOne limelightOne;
   private double goalDistance;
-  private RobotCentric robotCentric;
+  private RobotCentric robotCentric = new RobotCentric();
+  private PIDController pidController = new PIDController(.9, 0, 0);
 
-   
-  /** Creates a new Alignment. */
-  public Alignment(CommandSwerveDrivetrain drivetrain, RobotCentric robotCentric, LimelightOne limelightOne) {
+  /** Creates a new GetInRange. */
+  public GetInRange(CANRange canRange, CommandSwerveDrivetrain drivetrain, RobotCentric robotCentric, double goalDistance) {
+    this.goalDistance = goalDistance;
     this.drivetrain = drivetrain;
-    this.robotCentric = robotCentric;
-    this.limelightOne = limelightOne;
+    this.canRange = canRange;
+    // addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Init");
-    goalDistance = 60;
+    canRange.useCanrange();
+    System.out.println("init");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (canRange.getDistance() > goalDistance) {
     System.out.println("running");
-    if (Math.floor(LimelightOne.getDistanceFromAprilTag(30, 8, 12.2)) == goalDistance) {
-      isFinished();
-    } else if (Math.floor(LimelightOne.getDistanceFromAprilTag(30, 8, 12.2)) > goalDistance) {
-      drivetrain.setControl(
-        robotCentric
-          .withVelocityX(.5)
-          .withVelocityY(.5)
-          .withRotationalRate(0)
-      );
+    canRange.useCanrange();
+    drivetrain.setControl(robotCentric.withVelocityX(pidController.calculate(1)).withVelocityY(0).withRotationalRate(0));
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println();
-    drivetrain.setControl( 
-      robotCentric
-        .withVelocityX(0)
-        .withVelocityY(0)
-        .withRotationalRate(0)
-    );
+    canRange.inRange();
+    drivetrain.setControl(robotCentric.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
+    System.out.println("end");
+    drivetrain.runOnce(() -> drivetrain.seedFieldCentric());
+    canRange.stopCanrange();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

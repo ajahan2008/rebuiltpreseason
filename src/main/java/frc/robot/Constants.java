@@ -25,8 +25,8 @@ public final class Constants {
         public static final double kRotTolerance = 1;
 
         //times (i'd rather avoid these)
-        public static final double dontSeeTagTime = 0.5;
-        public static final double poseValidationTime = 0.3;
+        public static final double dontSeeTagTime = 1;
+        public static final double poseValidationTime = 1;
 
         // PID
         public static final double kXPID = 0.8;

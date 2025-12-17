@@ -5,12 +5,13 @@
 package frc.robot.subsystems;
 import frc.robot.LimelightHelpers;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 
-public class LimelightOne {
+public class LimelightOne extends SubsystemBase{
 
   static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-one");
   static NetworkTableEntry tx = table.getEntry("tx");
@@ -43,7 +44,7 @@ public class LimelightOne {
     return 0;
   }
 
-  public void update() {
+  public void periodic() {
     // This method will be called once per scheduler run
 
     //read values periodically
@@ -65,6 +66,7 @@ public class LimelightOne {
     // System.out.println("Distance" + calculate);
 
     SmartDashboard.putNumber("Distance:", autoEstimateDistance());
+    SmartDashboard.putNumber("ATag Dist", getDistanceFromAprilTag(30, 8, 12.2));
 
   }
 
@@ -82,7 +84,7 @@ public class LimelightOne {
     NetworkTableEntry ty = table.getEntry("ty");
     double targetOffsetAngle_Vertical = ty.getDouble(0.0);
 
-    double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
+    double angleToGoalDegrees = Math.abs(limelightMountAngleDegrees + targetOffsetAngle_Vertical);
     double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180);
 
     // calculate distance
