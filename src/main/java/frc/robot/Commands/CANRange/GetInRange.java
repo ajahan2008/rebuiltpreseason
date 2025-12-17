@@ -5,7 +5,6 @@
 package frc.robot.Commands.CANRange;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CANRange;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -18,7 +17,8 @@ public class GetInRange extends Command {
   private CommandSwerveDrivetrain drivetrain;
   private double goalDistance;
   private RobotCentric robotCentric = new RobotCentric();
-  private PIDController pidController = new PIDController(.9, 0, 0);
+  private PIDController pidController = new PIDController(1, 0, 0);
+  private double kError;
 
   /** Creates a new GetInRange. */
   public GetInRange(CANRange canRange, CommandSwerveDrivetrain drivetrain, RobotCentric robotCentric, double goalDistance) {
@@ -39,10 +39,15 @@ public class GetInRange extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    kError = canRange.getDistance() - goalDistance;
+    System.out.println(kError);
     if (canRange.getDistance() > goalDistance) {
-    System.out.println("running");
-    canRange.useCanrange();
-    drivetrain.setControl(robotCentric.withVelocityX(pidController.calculate(1)).withVelocityY(0).withRotationalRate(0));
+      if (kError > 1) { pidController.setP(2); }
+      if (kError > .5) { pidController.setP(.8); }
+      if (kError > .1) { pidController.setP(.1); }
+      System.out.println("running");
+      canRange.useCanrange();
+      drivetrain.setControl(robotCentric.withVelocityX(pidController.calculate(kError)).withVelocityY(0).withRotationalRate(0));
     }
   }
 
